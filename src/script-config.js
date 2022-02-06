@@ -1,30 +1,35 @@
 export const config = {
-    mainTemplate: (value) => {
-        return `main template with value ${value}`;
+    mainTemplate: (...args) => {
+        let result = "";
+        result += args[0] + " <- concept_museum;\n";
+        
+        return result;
     },
     propertyTemplates: [
         {
             osmPropertyName: 'phone',
-            scsPropertyTemplate: (value) => {
-                return `scs template with value ${value}`;
+            scsPropertyTemplate: (...args) => {
+                return `=>nrel_phone_number:
+                [${args[0]}]
+                (*<-concept_phone_number;;*);`;
             },
         },
         {
             osmPropertyName: 'site',
-            scsPropertyTemplate: (value) => {
-                return `scs template with value ${value}`;
+            scsPropertyTemplate: (...args) => {
+                return ``;
             },
         },
         {
             osmPropertyName: 'email',
-            scsPropertyTemplate: (value) => {
-                return `scs template with value ${value}`;
+            scsPropertyTemplate: (...args) => {
+                return ``;
             },
         },
         {
             osmPropertyName: 'region',
-            scsPropertyTemplate: (value) => {
-                return `scs template with value ${value}`;
+            scsPropertyTemplate: (...args) => {
+                return ``;
             },
         }
     ],
