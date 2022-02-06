@@ -1,0 +1,7 @@
+{
+  "type": "module",
+  "dependencies": {
+    "@toriyama/osmql": "^0.1.1",
+    "jshint": "^2.13.4"
+  }
+}
