@@ -4,6 +4,7 @@ export function ScsGenerator() {
     /**
      * 
      * @param {any} data 
+     * @returns {string}
      */
     this.GenerateFileFromData = (data) => {
         if (data.nameRu && data.nameEn){
