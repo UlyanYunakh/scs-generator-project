@@ -1,7 +1,7 @@
 import { config } from "./script-config.js";
 
 export const getPick = () => {
-    return config.propertyTemplates.map(item => item.osmPropertyName);
+    return config.pick;
 };
 
 export const getAreas = () => {
