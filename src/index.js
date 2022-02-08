@@ -2,7 +2,7 @@ import * as configHelper from "./config-helper.js";
 import { PickData } from "./osm-module/pick-data.js";
 import CyrillicToTranslit from 'cyrillic-to-translit-js';
 import * as fs from 'fs';
-import { ScsGenerator } from "./scs-generator-module/main.js";
+import { generateScsString } from "./scs-generator-module/main.js";
 
 /**
  * Method for collecting data:
@@ -89,8 +89,8 @@ const saveToFile = (folderName, fileName, content) => {
 
 const generateScs = (data) => {
     data.forEach(element => {
-        element.data.forEach(item => {
-            const scs = new ScsGenerator().GenerateScsString(item);
+        element.forEach(item => {
+            const scs = generateScsString(item);
             saveToFile(item.regionIdtf, item.idtf, scs);
         });
     });
@@ -112,5 +112,5 @@ const generateScs = (data) => {
 
     const data = mapData(validatedData);
 
-    console.log(data);
+    generateScs(data);
 })();

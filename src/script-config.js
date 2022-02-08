@@ -24,22 +24,22 @@ export const config = {
             name: 'Grodno region',
             osmAreaId: '3600059275',
         },
-        {
-            name: 'Gomel region',
-            osmAreaId: '3600059161',
-        },
-        {
-            name: 'Mogilev region',
-            osmAreaId: '3600059162',
-        },
-        {
-            name: 'Vitebsk region',
-            osmAreaId: '3600059506',
-        },
-        {
-            name: 'Brest region',
-            osmAreaId: '3600059189',
-        },
+        // {
+        //     name: 'Gomel region',
+        //     osmAreaId: '3600059161',
+        // },
+        // {
+        //     name: 'Mogilev region',
+        //     osmAreaId: '3600059162',
+        // },
+        // {
+        //     name: 'Vitebsk region',
+        //     osmAreaId: '3600059506',
+        // },
+        // {
+        //     name: 'Brest region',
+        //     osmAreaId: '3600059189',
+        // },
     ],
     mainTemplate: (...args) => {
         let result =
@@ -90,7 +90,7 @@ export const config = {
             },
         },
         {
-            osmPropertyName: 'region',
+            osmPropertyName: 'regionIdtf',
             scsPropertyTemplate: (...args) => {
                 let result = `\n=> nrel_region:`;
                 args.forEach(region => {
