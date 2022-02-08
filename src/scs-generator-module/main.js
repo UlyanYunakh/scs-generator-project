@@ -11,3 +11,4 @@ export const generateScsString = (data) => {
     });
     return scs + ";";
 };
+
