@@ -1,6 +1,8 @@
 import * as configHelper from "./config-helper.js";
 import { PickData } from "./osm-module/pick-data.js";
 import CyrillicToTranslit from 'cyrillic-to-translit-js';
+import * as fs from 'fs';
+import { ScsGenerator } from "./scs-generator-module/main.js";
 
 /**
  * Method for collecting data:
@@ -60,7 +62,42 @@ const mapData = (data) => {
 };
 
 /**
- * Some kind of main
+ * 
+ * @param {*} folderName 
+ * @param {*} fileName 
+ * @param {*} content 
+ */
+const saveToFile = (folderName, fileName, content) => {
+    let dirname = `out/${folderName}`;
+    fs.access(dirname, (error) => {
+        if (error) {
+            fs.mkdir(dirname, { recursive: true }, (err) => {
+                if (err) {
+                    console.error(err);
+                    return;
+                }
+            });
+        }
+    });
+
+    fs.writeFile(`out/${folderName}/${fileName}.scs`, content, (err) => {
+        if (err) {
+            console.error(err);
+        }
+    });
+}
+
+const generateScs = (data) => {
+    data.forEach(element => {
+        element.data.forEach(item => {
+            const scs = new ScsGenerator().GenerateScsString(item);
+            saveToFile(item.regionIdtf, item.idtf, scs);
+        });
+    });
+}
+
+/**
+ * Some kind of man
  */
 (async () => {
     const tags = configHelper.getTags();
