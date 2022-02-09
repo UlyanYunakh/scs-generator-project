@@ -1,8 +1,8 @@
-import * as configHelper from "./config-helper.js";
-import { PickData } from "./osm-module/pick-data.js";
+import * as configHelper from "./config/config-helper.js";
+import * as osmModule from "./osm-module/pick-data.js";
+import * as scsGeneratorModule from "./scs-generator-module/scs-generator.js";
+import * as fileSavingModule from "./file-saving-module/file-saving.js";
 import CyrillicToTranslit from 'cyrillic-to-translit-js';
-import * as fs from 'fs';
-import { generateScsString } from "./scs-generator-module/main.js";
 
 /**
  * Method for collecting data:
@@ -17,7 +17,7 @@ const collectData = async (areas, tags, pick, filterFunc = () => true) => {
     let result = [];
 
     for (const area of areas) {
-        let data = await PickData(area.osmAreaId, tags, pick);
+        let data = await osmModule.PickData(area.areaId, tags, pick);
 
         if (data) {
             data = data.filter(filterFunc);
@@ -61,47 +61,15 @@ const mapData = (data) => {
 };
 
 /**
- * Method for saving content in file:
- * @param {String} folderName folder to save name
- * @param {String} fileName file name
- * @param {String} content file content
- * @returns {Promise<void>} void
- */
-const saveToFile = async (folderName, fileName, content) => {
-    let dirname = `out/${folderName}`;
-
-    const dirPromise = new Promise((resolve, reject) => {
-        fs.access(dirname, error => {
-            if (error) {
-                fs.mkdir(dirname, { recursive: true }, err => {
-                    if (err) {
-                        console.error(err);
-                        reject("mkdir error");
-                    }
-                    resolve();
-                });
-            }
-        });
-    });
-
-    dirPromise.then(() => {
-        fs.writeFile(`out/${folderName}/${fileName}.scs`, content, (err) => {
-            if (err) {
-                console.error(err);
-            }
-        });
-    });
-};
-
-/**
  * Method for generating scs and saving results in file system
  * @param {Array<Array<any>>} data 
+ * @param {any} templates 
  */
-const generateScs = (data) => {
+const generateScs = (data, templates) => {
     data.forEach(area => {
         area.forEach(item => {
-            const scs = generateScsString(item);
-            saveToFile(item.regionIdtf, item.idtf, scs);
+            const scs = scsGeneratorModule.generateScsString(item, templates);
+            fileSavingModule.saveToFile(item.regionIdtf, item.idtf, scs);
         });
     });
 }
@@ -116,11 +84,13 @@ const generateScs = (data) => {
 
     const areas = configHelper.getAreas();
 
+    const templates = configHelper.getTemplates();
+
     const notValidatedData = await collectData(areas, tags, pick, (item) => item);
 
     const validatedData = validateData(notValidatedData);
 
     const data = mapData(validatedData);
 
-    generateScs(data);
+    generateScs(data, templates);
 })();

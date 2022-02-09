@@ -9,5 +9,9 @@ export const getAreas = () => {
 };
 
 export const getTags = () => {
-    return config.osmTags;
+    return config.tags;
 };
+
+export const getTemplates = () => {
+    return config.templates;
+}
