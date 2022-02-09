@@ -2,6 +2,8 @@
   "type": "module",
   "dependencies": {
     "@toriyama/osmql": "^0.1.1",
-    "jshint": "^2.13.4"
+    "cyrillic-to-translit-js": "^3.1.0",
+    "jshint": "^2.13.4",
+    "lodash": "^4.17.21"
   }
 }
