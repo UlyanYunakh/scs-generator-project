@@ -1,4 +1,5 @@
 import { CreateQuery } from "./create-query.js";
+import { config } from "./osm-config.js";
 import _ from "lodash";
 
 /**
@@ -8,7 +9,7 @@ import _ from "lodash";
  * @param {Array<String>} pick Names of properties to pick from node tags
  * @returns {Promise<Array<any>>} Promise with array of object with picked tags
  */
-export const PickData = (areaId, tags, pick) => {
+export const PickData = (areaId, tags, pick, tryCount = 0) => {
     const query = CreateQuery(areaId, tags);
 
     return query.execute().then(
@@ -16,9 +17,13 @@ export const PickData = (areaId, tags, pick) => {
             const data = result.data.elements.map(node => {
                 return _.pick(node.tags, pick);
             });
+
             return data;
         },
-        (error) => {
-            console.error(error);
+        async () => {
+            await new Promise(resolve => setTimeout(resolve(), config.timeOutBeforeRetry));
+            console.log(`areaId:${areaId} - attempt ${tryCount + 1} fail: retrying query...`);
+
+            return tryCount > config.retryCount ? [] : await PickData(areaId, tags, pick, ++tryCount);
         });
 };
