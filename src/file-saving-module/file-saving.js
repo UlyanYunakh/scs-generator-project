@@ -15,8 +15,8 @@ import * as fs from 'fs';
             if (error) {
                 fs.mkdir(dirname, { recursive: true }, err => {
                     if (err) {
-                        console.error(err);
-                        reject("mkdir error");
+                        console.error('fail to save files: ' + err.message);
+                        reject("fail to save files");
                     }
                     resolve();
                 });
@@ -27,7 +27,7 @@ import * as fs from 'fs';
     dirPromise.then(() => {
         fs.writeFile(`out/${folderName}/${fileName}.scs`, content, (err) => {
             if (err) {
-                console.error(err);
+                console.error('fail to save files: ' + err.message);
             }
         });
     });

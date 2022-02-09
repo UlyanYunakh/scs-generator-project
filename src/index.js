@@ -17,25 +17,17 @@ const collectData = async (areas, tags, pick, filterFunc = () => true) => {
     let result = [];
 
     for (const area of areas) {
+        console.log(`area name: ${area.name}, id: ${area.areaId} - pick data from OSM...`);
         let data = await osmModule.PickData(area.areaId, tags, pick);
 
         if (data) {
+            console.log(`area name: ${area.name}, id: ${area.areaId} - filtering data from OSM...`);
             data = data.filter(filterFunc);
             result.push({ area, data });
         }
     }
 
     return result;
-};
-
-/**
- * Method for validation: 
- * You can put your custom validator here
- * @param {Array<Array<any>>} data data for validation validate
- * @returns {Array<Array<any>>} validated data
- */
-const validateData = (data) => {
-    return data;
 };
 
 /**
@@ -48,16 +40,20 @@ const validateData = (data) => {
 const mapData = (data) => {
     const cyrillicToTranslit = new CyrillicToTranslit();
 
-    return data.map(areaItem => areaItem.data.map(item => {
-        if (!item['name:en']) {
-            item['name:en'] = cyrillicToTranslit.transform(item.name);
-        }
+    return data.map(areaItem => {
+        console.log(`area name: ${areaItem.area.name}, id: ${areaItem.area.areaId} - mapping data...`);
 
-        item.idtf = item['name:en'].replace(/[^a-zа-яё\s]/gi, '').toLowerCase().split(' ').join('_');
-        item.regionIdtf = areaItem.area.name.toLowerCase().split(' ').join('_');
+        return areaItem.data.map(item => {
+            if (!item['name:en']) {
+                item['name:en'] = cyrillicToTranslit.transform(item.name);
+            }
 
-        return item;
-    }));
+            item.idtf = item['name:en'].replace(/[^a-zа-яё\s]/gi, '').toLowerCase().split(' ').join('_');
+            item.regionIdtf = areaItem.area.name.toLowerCase().split(' ').join('_');
+
+            return item;
+        });
+    });
 };
 
 /**
@@ -66,6 +62,7 @@ const mapData = (data) => {
  * @param {any} templates 
  */
 const generateScs = (data, templates) => {
+    console.log(`Generating SCS files...`);
     data.forEach(area => {
         area.forEach(item => {
             const scs = scsGeneratorModule.generateScsString(item, templates);
@@ -86,11 +83,9 @@ const generateScs = (data, templates) => {
 
     const templates = configHelper.getTemplates();
 
-    const notValidatedData = await collectData(areas, tags, pick, (item) => item);
+    const notMappedData = await collectData(areas, tags, pick, (item) => item);
 
-    const validatedData = validateData(notValidatedData);
-
-    const data = mapData(validatedData);
+    const data = mapData(notMappedData);
 
     generateScs(data, templates);
 })();

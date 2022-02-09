@@ -22,7 +22,7 @@ export const PickData = (areaId, tags, pick, tryCount = 0) => {
         },
         async () => {
             await new Promise(resolve => setTimeout(resolve(), config.timeOutBeforeRetry));
-            console.log(`areaId:${areaId} - attempt ${tryCount + 1} fail: retrying query...`);
+            console.error(`areaId:${areaId} - attempt ${tryCount + 1} fail: retrying query...`);
 
             return tryCount > config.retryCount ? [] : await PickData(areaId, tags, pick, ++tryCount);
         });
