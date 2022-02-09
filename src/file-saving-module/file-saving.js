@@ -7,7 +7,7 @@ import * as fs from 'fs';
  * @param {String} content file content
  * @returns {Promise<void>} void
  */
- export const saveToFile = async (folderName, fileName, content) => {
+export const saveToFile = async (folderName, fileName, content) => {
     let dirname = `out/${folderName}`;
 
     const dirPromise = new Promise((resolve, reject) => {
@@ -20,6 +20,9 @@ import * as fs from 'fs';
                     }
                     resolve();
                 });
+            }
+            else {
+                resolve();
             }
         });
     });
