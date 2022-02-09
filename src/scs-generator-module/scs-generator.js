@@ -1,3 +1,9 @@
+/**
+ * Method for SCS generation
+ * @param {Array<any>} data
+ * @param {any} templates 
+ * @returns {String} scs content
+ */
 export const generateScsString = (data, templates) => {
     let scs = templates.mainTemplate(data.idtf, data['name:en'], data.name);
 
