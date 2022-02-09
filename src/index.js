@@ -6,7 +6,6 @@ import { generateScsString } from "./scs-generator-module/main.js";
 
 /**
  * Method for collecting data:
- * This is supporting method, you can completely change it's content
  * You can put your custom collect method here
  * @param {Array<any>} areas Area where find OSM node
  * @param {Array<any>} tags Tags which must exist in OSM node
@@ -62,34 +61,45 @@ const mapData = (data) => {
 };
 
 /**
- * 
- * @param {*} folderName 
- * @param {*} fileName 
- * @param {*} content 
+ * Method for saving content in file:
+ * @param {String} folderName folder to save name
+ * @param {String} fileName file name
+ * @param {String} content file content
+ * @returns {Promise<void>} void
  */
-const saveToFile = (folderName, fileName, content) => {
+const saveToFile = async (folderName, fileName, content) => {
     let dirname = `out/${folderName}`;
-    fs.access(dirname, (error) => {
-        if (error) {
-            fs.mkdir(dirname, { recursive: true }, (err) => {
-                if (err) {
-                    console.error(err);
-                    return;
-                }
-            });
-        }
+
+    const dirPromise = new Promise((resolve, reject) => {
+        fs.access(dirname, error => {
+            if (error) {
+                fs.mkdir(dirname, { recursive: true }, err => {
+                    if (err) {
+                        console.error(err);
+                        reject("mkdir error");
+                    }
+                    resolve();
+                });
+            }
+        });
     });
 
-    fs.writeFile(`out/${folderName}/${fileName}.scs`, content, (err) => {
-        if (err) {
-            console.error(err);
-        }
+    dirPromise.then(() => {
+        fs.writeFile(`out/${folderName}/${fileName}.scs`, content, (err) => {
+            if (err) {
+                console.error(err);
+            }
+        });
     });
-}
+};
 
+/**
+ * Method for generating scs and saving results in file system
+ * @param {Array<Array<any>>} data 
+ */
 const generateScs = (data) => {
-    data.forEach(element => {
-        element.forEach(item => {
+    data.forEach(area => {
+        area.forEach(item => {
             const scs = generateScsString(item);
             saveToFile(item.regionIdtf, item.idtf, scs);
         });

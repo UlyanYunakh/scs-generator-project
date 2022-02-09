@@ -60,7 +60,7 @@ export const config = {
                 args.forEach(phone => {
                     result += `\n` +
                     `   [${phone}]\n` +
-                    `   (* <- concept_phone_number;;*);`
+                    `   (* <- concept_phone_number;;*);`;
                 });
                 return result;
             },
@@ -72,7 +72,7 @@ export const config = {
                 args.forEach(site => {
                     result += `\n` +
                         `   [${site}]\n` +
-                        `   (*<-concept_site;;*);`
+                        `   (*<-concept_site;;*);`;
                 });
                 return result;
             },
@@ -84,7 +84,7 @@ export const config = {
                 args.forEach(email => {
                     result += `\n` +
                         `   [${email}]\n` +
-                        `   (*<-concept_email;;*);`
+                        `   (*<-concept_email;;*);`;
                 });
                 return result;
             },
@@ -95,7 +95,7 @@ export const config = {
                 let result = `\n=> nrel_region:`;
                 args.forEach(region => {
                     result += `\n` +
-                        `   [${region}];`
+                        `   [${region}];`;
                 });
                 return result;
             },
