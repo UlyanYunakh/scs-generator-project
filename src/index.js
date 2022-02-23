@@ -48,7 +48,7 @@ const mapData = (data) => {
                 item['name:en'] = cyrillicToTranslit.transform(item.name);
             }
 
-            item.idtf = item['name:en'].replace(/[^a-zа-яё\s]/gi, '').toLowerCase().split(' ').join('_');
+            item.idtf = item['name:en'].trim().replace(/[^a-zа-яё\s]/gi, '').toLowerCase().split(' ').join('_');
             item.regionIdtf = areaItem.area.name.toLowerCase().split(' ').join('_');
 
             return item;
